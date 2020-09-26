@@ -29,7 +29,7 @@ jobs:
         git remote add upstream https://github.com/fcying/IBMYes.git
         git remote -v
         echo `git fetch upstream`
-        echo `git merge upstream/master -m "update"`
+        echo `git merge upstream/master --allow-unrelated-histories -m "update"`
         echo `git rm .github/workflows/leanengine.yml`
         echo `git commit -m "rm leanengine.yml"`
         echo `git push origin master`
