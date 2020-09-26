@@ -1,0 +1,35 @@
+name: 'sync Upstream'
+
+on:
+  push:
+    branches: 
+      - master
+  schedule:
+    - cron: '0 17 * * *'
+
+jobs:
+  get_points:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout codes'
+      uses: actions/checkout@v2
+    - name: 'updateUpstream'
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        EMAIL:  ${{secrets.EMAIL}}
+        NAME: ${{secrets.NAME}} 
+      run: |
+        ls -a
+        git clone "https://$API_TOKEN_GITHUB@github.com/$NAME/IBMYes2.git" "IBMYes"
+        cd  IBMYes/
+        git config --global user.email "$EMAIL"
+        git config --global user.name "$NAME"
+        git remote -v
+        git checkout master
+        git remote add upstream https://github.com/fcying/IBMYes.git
+        git remote -v
+        echo `git fetch upstream`
+        echo `git merge upstream/master -m "update"`
+        echo `git rm .github/workflows/leanengine.yml`
+        echo `git commit -m "rm leanengine.yml"`
+        echo `git push origin master`
